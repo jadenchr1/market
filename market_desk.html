@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Market Desk</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#12101a;--p:#1b1826;--p2:#262236;--ln:#322d45;--tx:#ece8f5;--mu:#8d86a3;--am:#ffb347;--up:#5fd6a4;--dn:#ff6f7d;--bl:#7aa7ff}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--tx);font:14px/1.5 'IBM Plex Sans',system-ui,sans-serif}
+.m,input,.num{font-family:'IBM Plex Mono',ui-monospace,monospace}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600}
+a{color:inherit}
+header{display:flex;gap:16px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--ln);position:sticky;top:0;background:var(--bg);z-index:5;flex-wrap:wrap}
+header h1{font-size:22px;margin-right:auto}header h1 span{color:var(--am)}
+input{background:var(--p);border:1px solid var(--ln);color:var(--tx);border-radius:8px;padding:8px 12px;font-size:13px;outline:none}
+input:focus{border-color:var(--am)}
+#q{width:300px;text-transform:uppercase;font-weight:600;color:var(--am)}
+button{font:inherit;cursor:pointer}
+select{background:var(--p);border:1px solid var(--ln);color:var(--tx);border-radius:8px;padding:8px 10px;font-size:13px}
+.btn{background:var(--am);color:#1a1200;border:0;border-radius:8px;padding:8px 14px;font-weight:600;font-size:13px}
+.btn.g{background:var(--p2);color:var(--tx);border:1px solid var(--ln)}
+.app{display:grid;grid-template-columns:176px 1fr;min-height:calc(100vh - 110px)}
+nav{padding:16px 10px;border-right:1px solid var(--ln);display:flex;flex-direction:column;gap:4px}
+nav button{background:none;border:0;color:var(--mu);text-align:left;padding:9px 12px;border-radius:8px;font-weight:500}
+nav button.on{background:var(--p2);color:var(--tx);box-shadow:inset 3px 0 var(--am)}
+main{padding:20px;min-width:0}
+section[hidden]{display:none}
+.card{background:var(--p);border:1px solid var(--ln);border-radius:10px;padding:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chip{background:none;border:1px solid var(--ln);color:var(--mu);padding:3px 11px;border-radius:99px;font-size:12px}
+.chip.on{background:var(--am);color:#1a1200;border-color:var(--am);font-weight:600}
+.it{border-left:3px solid var(--ln);padding:10px 14px;background:var(--p);margin-bottom:8px;border-radius:0 8px 8px 0}
+.it.bull{border-color:var(--up)}.it.bear{border-color:var(--dn)}
+.it a{font-weight:600;text-decoration:none;display:block;margin:3px 0}.it a:hover{color:var(--am)}
+.it small{color:var(--mu)}.it p{color:var(--mu);font-size:12.5px}
+.b{font-size:10.5px;padding:1px 7px;border-radius:4px;margin-right:4px;font-weight:600;display:inline-block}
+.earn{background:#ff6f7d26;color:var(--dn);animation:pu 1.4s infinite}.rep{background:#7aa7ff26;color:var(--bl);animation:pu 1.8s infinite}
+.corp{background:#c79bff26;color:#c79bff}.bull .b.s,.b.bu{background:#5fd6a426;color:var(--up)}.b.be{background:#ff6f7d26;color:var(--dn)}
+@keyframes pu{50%{opacity:.4}}
+.up{color:var(--up)}.dn{color:var(--dn)}.am{color:var(--am)}.mu{color:var(--mu)}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:13px}.kv b{font-family:'IBM Plex Mono',monospace}
+.big{font-size:34px;font-weight:600}
+#tv{height:400px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal>div{background:var(--p);border:1px solid var(--ln);border-radius:6px;min-height:84px;padding:6px;font-size:11px}
+.cal .h{min-height:0;text-align:center;color:var(--mu);background:none;border:0}
+.cal .td{border-color:var(--am)}.cal .o{opacity:.35}
+.ev{display:block;border-radius:3px;padding:1px 5px;margin-top:3px;font-weight:600;font-size:10.5px}
+.e-nfp{background:#5fd6a426;color:var(--up)}.e-cpi{background:#ff6f7d26;color:var(--dn)}.e-fomc{background:#c79bff26;color:#c79bff}.e-opex{background:#7aa7ff26;color:var(--bl)}.e-pce{background:#ffb34726;color:var(--am)}
+.lk{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.lk a{border:1px solid var(--ln);border-radius:6px;padding:4px 10px;font-size:12px;text-decoration:none;color:var(--bl)}
+.e-ppi{background:#4dd0e126;color:#4dd0e1}.e-hol{background:#8d86a326;color:var(--mu)}
+.wr{display:flex;gap:8px;flex-wrap:wrap;padding:8px 20px;border-bottom:1px solid var(--ln);background:var(--p)}.wp{font-size:12px;padding:3px 10px;border-radius:99px;border:1px solid var(--ln);color:var(--mu)}.wp.high{border-color:var(--am);color:var(--am)}.wp.up{border-color:var(--up);color:var(--up)}
+.et{width:100%;border-collapse:collapse;font-size:13px}.et td,.et th{padding:8px 12px;border-bottom:1px solid var(--ln);text-align:left;vertical-align:top}.et th{color:var(--mu);font-weight:500;font-size:11.5px;white-space:nowrap}.et tr.soon td:first-child{box-shadow:inset 3px 0 var(--am)}.et tr.past{opacity:.4}.st-c{color:var(--up)}.st-e{color:var(--am)}.st-p{color:var(--mu)}
+@media(max-width:860px){.app{grid-template-columns:1fr}nav{flex-direction:row;overflow-x:auto;border:0;border-bottom:1px solid var(--ln)}.grid2{grid-template-columns:1fr}#q{width:100%}.cal>div{min-height:60px}}
+</style></head>
+<body>
+<header>
+  <h1>Market <span>Desk</span></h1>
+  <input id="q" list="tl" autocomplete="off" spellcheck="false" placeholder="Ticker: MU, TSLA, BRK.B, D05.SI" onkeydown="if(event.key==='Enter')setSym(this.value)" oninput="if(!event.inputType||event.inputType==='insertReplacementText')setSym(this.value)">
+  <datalist id="tl"></datalist>
+  <button class="btn" onclick="setSym(q.value)">Analyze</button>
+  <button class="btn g" onclick="loadNews()">Refresh news</button>
+</header>
+<div id="tape"></div>
+<div id="warn"></div>
+<div class="app">
+<nav>
+  <button data-v="news" onclick="go('news')">Live news</button>
+  <button data-v="analyze" onclick="go('analyze')">AI analysis</button>
+  <button data-v="whales" onclick="go('whales')">Whales &amp; insiders</button>
+  <button data-v="options" onclick="go('options')">Options</button>
+  <button data-v="calendar" onclick="go('calendar')">Calendar</button>
+</nav>
+<main>
+<section id="v-news">
+  <div class="row"><input id="ns" oninput="drawNews()" placeholder="Filter headlines (MU, oil, Fed...)" style="flex:1;min-width:200px">
+    <span id="scope"></span></div>
+  <div class="row" id="badges"></div>
+  <div class="row mu" id="stat"></div>
+  <div id="feed"></div>
+</section>
+
+<section id="v-analyze" hidden>
+  <div class="row">
+    <input id="aq" list="tl" autocomplete="off" spellcheck="false" placeholder="Search any ticker (MU, TSLA, BRK.B, D05.SI) and press Enter" style="flex:1;min-width:240px;text-transform:uppercase;font-weight:600;color:var(--am)" onkeydown="if(event.key==='Enter')setSym(this.value)" oninput="if(!event.inputType||event.inputType==='insertReplacementText')setSym(this.value)">
+    <button class="btn" onclick="setSym($('#aq').value)">Run AI scan</button>
+  </div>
+  <div class="row"><span id="chips"></span></div>
+  <div class="grid2">
+    <div class="card"><h3>TradingView technical gauge</h3><div id="tv"></div></div>
+    <div class="card"><h3 style="margin-bottom:10px">AI trade signal</h3><div id="sig"></div></div>
+  </div>
+  <div class="card" style="margin-top:16px"><h3>AI analyst: news-based take</h3>
+    <p class="mu" style="font-size:12.5px;margin:4px 0 12px">Sends the live headlines and the technical numbers above to the AI you choose and shows its reasoning. Your key stays in this browser and goes only to the provider.</p>
+    <div class="row"><select id="ap" onchange="aiDef()"><option value="gemini">Gemini (Google)</option><option value="grok">Grok (xAI)</option><option value="custom">Other (OpenAI-style)</option></select>
+      <input id="am" placeholder="model name" style="width:170px"><input id="ab" placeholder="API base URL" style="width:210px"><input id="ak" type="password" placeholder="API key" style="width:190px">
+      <select id="ah"><option>today</option><option>the next few hours</option><option>this week</option></select>
+      <label class="mu" id="aslab"><input type="checkbox" id="as" checked> web search</label><button class="btn" id="ago" onclick="askAI()">Ask AI</button></div>
+    <div id="aiout" class="mu" style="font-size:13.5px;line-height:1.65">Add a model name and API key, then press Ask AI.</div></div>
+  <div class="card" style="margin-top:16px"><h3>Get a second opinion</h3>
+    <p class="mu" style="font-size:12.5px;margin-top:4px">The signal above is a rule-based model on live candles. Cross-check with other engines:</p>
+    <div class="lk" id="second"></div></div>
+</section>
+
+<section id="v-whales" hidden>
+  <div class="row"><span id="wf"></span><button class="btn g" onclick="logTrade()" style="margin-left:auto">+ Log a trade</button></div>
+  <div id="mine"></div><div id="wfeed"></div>
+  <div class="card"><h3>Primary sources</h3><p class="mu" style="font-size:12.5px;margin-top:4px">Headlines above are live news. For the filings themselves:</p>
+    <div class="lk"><a href="https://www.capitoltrades.com" target="_blank">Capitol Trades (Pelosi &amp; Congress)</a><a href="https://www.quiverquant.com/congresstrading/" target="_blank">Quiver Quant</a><a href="http://openinsider.com" target="_blank">OpenInsider (CEO buys)</a><a href="https://www.sec.gov/edgar/search/" target="_blank">SEC EDGAR Form 4</a></div></div>
+</section>
+
+<section id="v-options" hidden>
+  <div class="card"><h3 id="otitle">Options</h3><div id="optout" style="margin-top:12px"></div><div class="lk" id="olinks"></div></div>
+</section>
+
+<section id="v-calendar" hidden>
+  <div class="row"><button class="btn g" onclick="mv(-1)">‹</button><h2 id="cm" style="min-width:190px;text-align:center"></h2><button class="btn g" onclick="mv(1)">›</button>
+    <span class="ev e-nfp">NFP jobs</span><span class="ev e-cpi">CPI</span><span class="ev e-ppi">PPI</span><span class="ev e-pce">PCE</span><span class="ev e-fomc">FOMC</span><span class="ev e-opex">Options expiry</span><span class="ev e-hol">US holiday</span></div>
+  <div class="cal" id="cal"></div>
+  <p class="mu" style="font-size:12px;margin-top:10px">CPI and PPI dates marked ✓ were checked against the BLS release schedule (8:30am ET, which is 9:30pm Singapore time). NFP (first Friday), options expiry (third Friday) and FOMC decisions follow the published pattern. Items marked * are estimates; confirm on bls.gov and federalreserve.gov.</p>
+  <h2 style="margin:30px 0 6px">Earnings watchlist</h2>
+  <p class="mu" style="font-size:12.5px;margin-bottom:12px">Mag 7, semis, software, healthcare, consumer and finance. Times are converted to Singapore time. Click a ticker to open its analysis.</p>
+  <div class="row" id="ef"></div>
+  <div class="row"><input id="fk" type="password" autocomplete="off" placeholder="Finnhub API key" style="width:230px"><button class="btn" id="fgo" onclick="refreshEarn()">Refresh dates</button><span class="mu" id="fst" style="font-size:12px"></span></div>
+  <div class="card" style="padding:0;overflow-x:auto"><table class="et" id="et"></table></div>
+  <p class="mu" style="font-size:12px;margin-top:10px;line-height:1.6"><b class="st-c">✓ confirmed</b> = the company announced the date. <b class="st-e">~ est.</b> = listed by data sites but not confirmed. <b class="st-p">≈ pattern</b> = guessed from last year’s schedule, could be off by a week or more. Data sites disagreed on NVDA and AVGO until the companies announced, so treat anything not ✓ as a rough guide and use “verify” before trading around it. <b class="st-e">↻ feed</b> = pulled from Finnhub when you press Refresh (still not confirmed by the company). Use ✎ to correct a date and your change is remembered in this browser. List last checked 12 Nov 2026.</p>
+</section>
+</main></div>
+
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const store={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const SUF={SI:'SGX',HK:'HKEX',L:'LSE',T:'TSE',KS:'KRX',TO:'TSX',AX:'ASX'},US_EX={NMS:'NASDAQ',NGM:'NASDAQ',NCM:'NASDAQ',NYQ:'NYSE',ASE:'AMEX',PCX:'AMEX'};
+const NAMES={MU:'Micron',NVDA:'NVIDIA',AMD:'AMD',WDC:'Western Digital',INTC:'Intel',AAPL:'Apple',MSFT:'Microsoft',GOOGL:'Alphabet',AMZN:'Amazon',META:'Meta',TSLA:'Tesla',AVGO:'Broadcom',TSM:'TSMC',SMCI:'Super Micro',PLTR:'Palantir',SPY:'S&P 500 ETF',QQQ:'Nasdaq-100 ETF','D05.SI':'DBS Group'};
+const PRESETS=['MU','NVDA','AMD','WDC','INTC','AAPL','TSLA'];
+const LOCAL='http://localhost:8787/?url=',PX=[u=>LOCAL+encodeURIComponent(u),u=>u,u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u),u=>'https://corsproxy.io/?'+encodeURIComponent(u)];
+const RSS=[['Yahoo Finance','https://finance.yahoo.com/news/rssindex'],['MarketWatch','https://feeds.content.dowjones.io/public/rss/mw_topstories'],['Investing.com','https://www.investing.com/rss/news.rss'],['CNBC','https://search.cnbc.com/rs/search/combinednews/rss?partnerId=wrnt&keywords=stocks'],['OilPrice','https://oilprice.com/rss/main']];
+const gn=q=>'https://news.google.com/rss/search?hl=en-US&gl=US&ceid=US:en&q='+encodeURIComponent(q);
+let sym=store.get('md_sym','NVDA'),view='news',stale={a:1,o:1},wl=0,base=[],symNews=[],wAll=[],wFilter='All',scope='All',on=new Set(),seq=0,lastTv='';
+const BADGES=[['earn','🔴 Earnings',/earnings|\beps\b|guidance/],['rep','📊 Macro report',/\b(cpi|ppi|pce|nfp|fomc|fed|payrolls?)\b/],['corp','📢 Corp action',/announces|acquisition|acquire|merger|buyback|spin-?off/],['bu','🟢 Bullish',/surge|jump|rally|upgrade|beat|gain|soar|record high/],['be','🔴 Bearish',/plunge|drop|fall|downgrade|miss|loss|slump|tumble/]];
+const MACRO=/fed\b|fomc|inflation|cpi|ppi|pce|jobs|payroll|rate cut|rate hike|tariff|oil|opec|war\b|treasury|yield|gdp|recession|china|sanction|ceasefire|geopolit|dollar/i,STOCK=/stock|share|earnings|analyst|upgrade|downgrade|price target|ipo|buyback|nasdaq|nyse|\b[A-Z]{2,5}\b/;
+
+/* ---------- navigation & shared ticker ---------- */
+function go(v){view=v;document.querySelectorAll('section').forEach(s=>s.hidden=s.id!=='v-'+v);document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+ if(v==='analyze'&&stale.a){stale.a=0;scan(true)}if(v==='options'&&stale.o){stale.o=0;loadOpt()}if(v==='whales'&&!wl){wl=1;loadWhales()}if(v==='calendar')drawCal()}
+function normalize(v){v=(v||'').toUpperCase().replace(/[^A-Z0-9.\-^=]/g,'').slice(0,12);const d=v.lastIndexOf('.');return d>0&&SUF[v.slice(d+1)]?v:v.replace('.','-')}
+function setSym(raw){const s=normalize(raw);if(!s)return;sym=s;store.set('md_sym',s);$('#q').value=s;$('#aq').value=s;stale={a:1,o:1};chips();loadSymNews();drawWarn();go('analyze')}
+function chips(){const l=[...new Set([sym,...store.get('md_recent',[]),...PRESETS])].slice(0,10);$('#chips').innerHTML=l.map(t=>`<button class="chip ${t===sym?'on':''}" onclick="setSym('${t}')">$${t}</button> `).join('')}
+async function getJSON(url){let err;for(const p of PX){try{const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);const r=await fetch(p(url),{signal:c.signal});clearTimeout(t);if((r.status>=500||r.status===429)&&p===PX[0])throw new Error('HTTP '+r.status);return await r.json()}catch(e){err=e}}throw err||new Error('NETWORK')}
+const rel=d=>{const m=Math.floor((Date.now()-d)/6e4);return m<1?'just now':m<60?m+'m ago':m<1440?Math.floor(m/60)+'h ago':Math.floor(m/1440)+'d ago'};
+
+/* ---------- live news ---------- */
+async function feed(name,url,tag){try{const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(url));const j=await r.json();
+ return(j.items||[]).map(i=>{const d=String(i.description||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),t=(i.title+' '+d).toLowerCase(),f=BADGES.filter(b=>b[2].test(t)).map(b=>b[0]);
+  return{title:i.title,link:i.link,src:name,tag,date:new Date(String(i.pubDate).replace(' ','T')+'Z'),snip:d.slice(0,150),f,sent:f.includes('bu')?'bull':f.includes('be')?'bear':'',macro:MACRO.test(t),stock:STOCK.test(i.title)}})}catch(e){return[]}}
+const dedupe=a=>{const s=new Set();return a.filter(x=>{const k=x.title.toLowerCase();return s.has(k)?0:s.add(k)})};
+async function loadNews(){$('#feed').innerHTML='<p class="mu">Fetching live feeds…</p>';base=dedupe((await Promise.all(RSS.map(r=>feed(r[0],r[1])))).flat());await loadSymNews(1)}
+async function loadSymNews(skip){symNews=await feed('Google News',gn(sym+' stock'),'$'+sym);if(!skip||1)drawNews()}
+function drawNews(){const q=$('#ns').value.toLowerCase().trim();
+ const all=dedupe([...symNews,...base]).sort((a,b)=>b.date-a.date);
+ const list=all.filter(x=>(!q||(x.title+x.snip).toLowerCase().includes(q))&&(scope==='All'||(scope==='Macro'?x.macro:x.stock||x.tag))&&(!on.size||x.f.some(f=>on.has(f))));
+ $('#scope').innerHTML=['All','Stocks','Macro'].map(s=>`<button class="chip ${s===scope?'on':''}" onclick="scope='${s}';drawNews()">${s==='Macro'?'Global macro':s}</button> `).join('');
+ $('#badges').innerHTML=BADGES.map(b=>`<button class="chip ${on.has(b[0])?'on':''}" onclick="on.has('${b[0]}')?on.delete('${b[0]}'):on.add('${b[0]}');drawNews()">${b[1]} · ${all.filter(x=>x.f.includes(b[0])).length}</button>`).join('')+(on.size?' <button class="chip" onclick="on.clear();drawNews()">clear</button>':'');
+ $('#stat').textContent=`${list.length} of ${all.length} stories · updated ${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})} · ticker feed: $${sym}`;
+ $('#feed').innerHTML=list.slice(0,80).map(x=>`<div class="it ${x.sent}"><small class="m">${esc(x.src)}${x.tag?' · '+esc(x.tag):''} · ${rel(x.date)}</small> ${x.f.map(f=>{const b=BADGES.find(b=>b[0]===f);return`<span class="b ${f}">${b[1]}</span>`}).join('')}<a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a>${x.snip?`<p>${esc(x.snip)}</p>`:''}</div>`).join('')||'<p class="mu">No stories match. Clear a filter or refresh.</p>'}
+
+/* ---------- AI analysis ---------- */
+function tvSymbol(s,m){const d=s.lastIndexOf('.');if(d>0&&SUF[s.slice(d+1)])return SUF[s.slice(d+1)]+':'+s.slice(0,d).replace(/^0+/,'');return(US_EX[m.exchangeName]?US_EX[m.exchangeName]+':':'')+s.replace('-','.')}
+function embed(id,file,cfg){const b=$('#'+id);b.innerHTML='<div class="tradingview-widget-container__widget"></div>';const s=document.createElement('script');s.src='https://s3.tradingview.com/external-embedding/embed-widget-'+file+'.js';s.async=true;s.text=JSON.stringify(cfg);b.appendChild(s)}
+function loadGauge(t){if(t===lastTv)return;lastTv=t;embed('tv','technical-analysis',{interval:'1D',width:'100%',height:'100%',isTransparent:true,symbol:t,showIntervalTabs:true,displayMode:'single',locale:'en',colorTheme:'dark'})}
+async function chart(s){const j=await getJSON(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(s)}?range=1y&interval=1d`);if(j.chart&&j.chart.error)throw new Error('NOTFOUND');const r=j.chart&&j.chart.result&&j.chart.result[0];if(!r)throw new Error('BAD');return r}
+const ema=(a,n)=>{const k=2/(n+1);let e=a[0];return a.map((v,i)=>i?(e=v*k+e*(1-k)):e)},sma=(a,n)=>a.slice(-n).reduce((s,v)=>s+v,0)/Math.min(n,a.length);
+function rsi(c,n=14){let g=0,l=0;for(let i=1;i<=n;i++){const d=c[i]-c[i-1];d>0?g+=d:l-=d}g/=n;l/=n;for(let i=n+1;i<c.length;i++){const d=c[i]-c[i-1];g=(g*(n-1)+Math.max(d,0))/n;l=(l*(n-1)+Math.max(-d,0))/n}return l===0?100:100-100/(1+g/l)}
+function atr(h,l,c,n=14){const t=[];for(let i=1;i<c.length;i++)t.push(Math.max(h[i]-l[i],Math.abs(h[i]-c[i-1]),Math.abs(l[i]-c[i-1])));return t.slice(-n).reduce((a,b)=>a+b,0)/n}
+function analyze(res){const q=res.indicators.quote[0],H=[],L=[],C=[];res.timestamp.forEach((_,i)=>{if(q.close[i]!=null&&q.high[i]!=null&&q.low[i]!=null){H.push(q.high[i]);L.push(q.low[i]);C.push(q.close[i])}});
+ if(C.length<60)throw new Error('HISTORY');const m=res.meta,price=m.regularMarketPrice??C[C.length-1],n=C.length;C[n-1]=price;
+ const has200=n>=200,e200=ema(C,200)[n-1],e20=ema(C,20)[n-1],s50=sma(C,50),r=rsi(C),a=atr(H,L,C),e26=ema(C,26),mac=ema(C,12).map((v,i)=>v-e26[i]),hist=mac[n-1]-ema(mac,9)[n-1];
+ const sup=[],rs=[];for(let i=Math.max(2,n-120);i<n-2;i++){if(L[i]<=Math.min(L[i-1],L[i-2],L[i+1],L[i+2]))sup.push(L[i]);if(H[i]>=Math.max(H[i-1],H[i-2],H[i+1],H[i+2]))rs.push(H[i])}
+ const bl=sup.filter(v=>v<price),ab=rs.filter(v=>v>price),support=bl.length?Math.max(...bl):price-2*a,resistance=ab.length?Math.min(...ab):price+2*a,stop=Math.max(support-.5*a,price-3*a),target=price+2*(price-stop);
+ const sig=[['Price above 200-EMA',has200?price>e200:null,2],['Price above 50-SMA',price>s50,1],['20-EMA above 50-SMA',e20>s50,1],['MACD histogram positive',hist>0,1],['RSI(14) above 50',r>50,1],['1-month return positive',price>C[n-22],1]];
+ let bu=0,be=0;sig.forEach(([,ok,w])=>{if(ok===true)bu+=w;else if(ok===false)be+=w});const pct=(bu-be)/(bu+be),dir=pct>=.25?1:pct<=-.25?-1:0;
+ return{m,price,chg:(price/C[n-2]-1)*100,r,a,e200:has200?e200:null,support,resistance,projR:!ab.length,stop,target,sig,conf:Math.round(Math.max(bu,be)/(bu+be)*100),dir,
+  stance:pct>=.7?'Strong bullish':dir>0?'Bullish':pct<=-.7?'Strong bearish':dir<0?'Bearish':'Neutral / mixed',
+  verdict:dir>0?(r>75?'Overbought: wait for a pullback':price-support<1.5*a?'Buy near support':'Hold / buy dips'):dir<0?(r<30?'Oversold: watch for a bounce':'Avoid / reduce'):'Wait for a breakout',
+  rr:(resistance-price)/(price-stop),hi:Math.max(...H.slice(-252)),lo:Math.min(...L.slice(-252))}}
+function money(v,c){try{return new Intl.NumberFormat('en-US',{style:'currency',currency:c||'USD'}).format(v)}catch(e){return v.toFixed(2)}}
+function drawSig(x){lastX=x;const c=x.m.currency,$$=v=>money(v,c),col=x.dir>0?'up':x.dir<0?'dn':'am',asOf=x.m.regularMarketTime?new Date(x.m.regularMarketTime*1000).toLocaleString([], {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+ $('#sig').innerHTML=`<div class="mu">${esc(NAMES[sym]||x.m.shortName||'')} <span class="m">$${esc(sym)}</span></div>
+ <div class="row"><span class="big num">${$$(x.price)}</span><span class="${x.chg>=0?'up':'dn'} num">${x.chg>=0?'▲':'▼'} ${Math.abs(x.chg).toFixed(2)}%</span><small class="mu">as of ${asOf}</small></div>
+ <div class="row"><span class="${col}" style="font:600 20px Fraunces,serif">${x.stance}</span><span class="b ${x.dir>0?'bu':x.dir<0?'be':'corp'}">${x.verdict}</span></div>
+ ${warnFor()}<div class="kv"><div>Confluence <b class="am">${x.conf}%</b></div><div>RSI(14) <b>${x.r.toFixed(0)}</b></div><div>Support <b class="up">${$$(x.support)}</b></div><div>Resistance <b class="dn">${$$(x.resistance)}${x.projR?' (proj.)':''}</b></div>
+ <div>Stop loss <b class="dn">${$$(x.stop)}</b></div><div>Target (2R) <b class="up">${$$(x.target)}</b></div><div>52W range <b>${$$(x.lo)} – ${$$(x.hi)}</b></div><div>Reward : risk to resistance <b>${x.rr.toFixed(1)}</b></div></div>
+ <div class="kv" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--ln);font-size:12px">${x.sig.map(([t,ok])=>`<div>${ok===null?'–':ok?'<span class="up">✓</span>':'<span class="dn">✗</span>'} ${t}</div>`).join('')}</div>
+ <div class="row" style="margin-top:12px"><button class="btn g" id="cp">Copy prompt for any AI</button><button class="btn g" onclick="$('#ns').value=sym;go('news');drawNews()">News for $${esc(sym)}</button></div>`;
+ $('#cp').onclick=()=>{navigator.clipboard.writeText(`Act as a cautious equity analyst. ${sym} trades at ${$$(x.price)} (${x.chg.toFixed(2)}% today). RSI14 ${x.r.toFixed(0)}, 200-EMA ${x.e200?$$(x.e200):'n/a'}, support ${$$(x.support)}, resistance ${$$(x.resistance)}, 52w range ${$$(x.lo)}-${$$(x.hi)}. Model stance: ${x.stance}. Give bull case, bear case, key catalysts and risks, and say what would change your mind.`);$('#cp').textContent='Copied ✓'}}
+async function scan(full){const s=sym,id=++seq,out=$('#sig');chips();if(full){out.innerHTML='<p class="mu">Fetching live data for $'+esc(s)+'…</p>';loadGauge(tvSymbol(s,{}))}
+ $('#second').innerHTML=[['Finviz',`https://finviz.com/quote.ashx?t=${s}`],['Yahoo Finance',`https://finance.yahoo.com/quote/${s}`],['TipRanks',`https://www.tipranks.com/stocks/${s.toLowerCase()}`],['Seeking Alpha',`https://seekingalpha.com/symbol/${s}`],['TradingView',`https://www.tradingview.com/symbols/${s}/`]].map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${n}</a>`).join('');
+ try{const x=analyze(await chart(s));if(id!==seq)return;drawSig(x);loadGauge(tvSymbol(s,x.m));store.set('md_recent',[s,...store.get('md_recent',[]).filter(t=>t!==s)].slice(0,6));chips()}
+ catch(e){if(id!==seq)return;out.innerHTML=`<p class="dn">${e.message==='NOTFOUND'?`Couldn’t find $${esc(s)}. Check the ticker (Singapore stocks end in .SI, e.g. D05.SI).`:e.message==='HISTORY'?'Not enough price history to run the scan.':'Couldn’t reach the market data feed. Start the helper (double-click start_helper.bat) or check your connection, then press Analyze again. No numbers are shown rather than stale ones.'}</p>`}}
+
+/* ---------- AI analyst (Gemini / Grok / any OpenAI-style API) ---------- */
+let lastX=null;const AID={gemini:['gemini-2.5-flash',''],grok:['grok-4','https://api.x.ai/v1'],custom:['','https://api.openai.com/v1']};
+function aiDef(){const p=$('#ap').value;$('#am').value=AID[p][0];$('#ab').value=AID[p][1];$('#ab').hidden=p==='gemini';$('#aslab').hidden=p!=='gemini'}
+function aiLoad(){const c=store.get('md_ai',null);if(c){$('#ap').value=c.p;aiDef();$('#am').value=c.m;$('#ab').value=c.b;$('#ak').value=c.k;$('#ah').value=c.h}else aiDef()}
+const fmt=t=>esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/^\s*[*-] /gm,'• ').replace(/\n/g,'<br>');
+async function askAI(){const p=$('#ap').value,model=$('#am').value.trim(),base=$('#ab').value.trim().replace(/\/$/,''),key=$('#ak').value.trim(),h=$('#ah').value,out=$('#aiout'),web=p==='gemini'&&$('#as').checked;
+ if(!key||!model){out.innerHTML='<span class="dn">Enter a model name and API key first.</span>';return}
+ store.set('md_ai',{p,m:model,b:base,k:key,h});const x=lastX,$$=v=>money(v,x&&x.m.currency),nl=l=>l.map(n=>`- [${rel(n.date)}] ${n.title} (${n.src})`).join('\n')||'- none found';
+ const tech=x?`Price ${$$(x.price)} (${x.chg.toFixed(2)}% today), RSI14 ${x.r.toFixed(0)}, support ${$$(x.support)}, resistance ${$$(x.resistance)}, 52-week range ${$$(x.lo)} to ${$$(x.hi)}, rule-based model: ${x.stance} (${x.conf}% confluence).`:'No technical data loaded yet.';
+ const prompt=`You are a cautious equity analyst. Assess ${sym} for ${h}. Use only the data below${web?' plus Google Search for the latest news':''}. If the news is thin or stale, say so instead of guessing.
+Answer in this format: 1) Verdict: Buy, Hold or Sell for ${h}, with confidence (low, medium or high). 2) Why: 3-5 bullets, each tied to a specific headline or technical level. 3) Bull case vs bear case. 4) Key risks and upcoming catalysts. 5) What would change your view. Keep it under 300 words and end with "Educational only, not financial advice."
+TECHNICALS: ${tech}
+${sym} HEADLINES:
+${nl(symNews.slice(0,12))}
+MACRO HEADLINES:
+${nl(base.filter(n=>n.macro).slice(0,8))}`;
+ out.innerHTML='<span class="mu">Thinking…</span>';$('#ago').disabled=true;
+ try{let text;
+  if(p==='gemini'){const call=async s=>{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],...(s?{tools:[{google_search:{}}]}:{})})});return[r.ok,await r.json()]};
+   let[ok,j]=await call(web);if(!ok&&web){[ok,j]=await call(false)}if(!ok)throw new Error((j.error&&j.error.message)||'Request failed');text=((j.candidates&&j.candidates[0]&&j.candidates[0].content.parts)||[]).map(z=>z.text||'').join('')}
+  else{const r=await fetch(base+'/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify({model,messages:[{role:'user',content:prompt}]})}),j=await r.json();if(!r.ok)throw new Error((j.error&&(j.error.message||j.error))||'Request failed');text=j.choices[0].message.content}
+  out.innerHTML=fmt(text||'The AI returned an empty answer.')+`<p class="mu" style="font-size:11px;margin-top:8px">${esc(p)} · ${esc(model)} · ${new Date().toLocaleTimeString()} · ${esc(h)}</p>`}
+ catch(e){out.innerHTML=`<span class="dn">${esc(e.message)}</span><p class="mu" style="font-size:12px">“Failed to fetch” usually means the provider blocks calls from a browser page, or the key or model name is wrong. Gemini works from a browser; check the model name in your provider’s docs.</p>`}
+ $('#ago').disabled=false}
+
+/* ---------- whales, congress & CEO buys ---------- */
+const WQ=[['Pelosi','Nancy Pelosi stock trade'],['Congress','congress members stock trades disclosed'],['CEO buys','CEO buys shares insider purchase Form 4'],['Insider','insider buying cluster stock']];
+async function loadWhales(){$('#wfeed').innerHTML='<p class="mu">Searching live headlines…</p>';wAll=dedupe((await Promise.all(WQ.map(q=>feed('Google News',gn(q[1]),q[0])))).flat()).sort((a,b)=>b.date-a.date);drawWhales()}
+function drawWhales(){$('#wf').innerHTML=['All',...WQ.map(q=>q[0])].map(t=>`<button class="chip ${t===wFilter?'on':''}" onclick="wFilter='${t}';drawWhales()">${t==='Pelosi'?'🏛 Pelosi':t}</button> `).join('');
+ const mine=store.get('md_whales',[]);$('#mine').innerHTML=mine.length?'<h3 style="margin:4px 0 8px">Your log</h3>'+mine.map((t,i)=>`<div class="it bull"><small class="m">${esc(t.date)} · logged by you</small><a>${esc(t.who)}: ${esc(t.act)} $${esc(t.t)} (${esc(t.amt)})</a><p>${esc(t.note)} <button class="chip" onclick="delTrade(${i})">remove</button></p></div>`).join(''):'';
+ $('#wfeed').innerHTML='<h3 style="margin:12px 0 8px">Live headlines</h3>'+(wAll.filter(x=>wFilter==='All'||x.tag===wFilter).slice(0,40).map(x=>`<div class="it ${x.sent}"><small class="m"><span class="b corp">${esc(x.tag)}</span>${esc(x.src)} · ${rel(x.date)}</small><a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a></div>`).join('')||'<p class="mu">No headlines found right now.</p>')}
+function logTrade(){const t=(prompt('Ticker')||'').toUpperCase().trim();if(!t)return;const o={t,who:prompt('Who? (e.g. Nancy Pelosi, CEO name)')||'Unknown',act:prompt('Action (e.g. Bought calls, Open-market buy)')||'Bought',amt:prompt('Amount (e.g. $1M-$5M)')||'n/a',note:prompt('Notes')||'',date:new Date().toISOString().slice(0,10)};store.set('md_whales',[o,...store.get('md_whales',[])]);drawWhales()}
+function delTrade(i){const a=store.get('md_whales',[]);a.splice(i,1);store.set('md_whales',a);drawWhales()}
+
+/* ---------- options ---------- */
+const thirdFri=(y,m)=>{const f=1+((5-new Date(y,m,1).getDay()+7)%7);return new Date(y,m,f+14)};
+function nextOpex(){const n=new Date();let d=thirdFri(n.getFullYear(),n.getMonth());if(d<new Date(n.getFullYear(),n.getMonth(),n.getDate()))d=thirdFri(n.getFullYear(),n.getMonth()+1);return d}
+async function loadOpt(){const s=sym,ox=nextOpex();$('#otitle').textContent=`$${s} options · monthly expiry ${ox.toDateString()}`;
+ $('#olinks').innerHTML=[['Yahoo chain',`https://finance.yahoo.com/quote/${s}/options`],['Barchart max pain',`https://www.barchart.com/stocks/quotes/${s}/options`],['MarketChameleon',`https://marketchameleon.com/Overview/${s}/OptionChain/`],['OptionCharts',`https://optioncharts.io/options/${s}/option-chain`]].map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${n}</a>`).join('');
+ $('#optout').innerHTML='<p class="mu">Loading the nearest expiry…</p>';
+ try{const j=await getJSON(`https://query2.finance.yahoo.com/v7/finance/options/${encodeURIComponent(s)}`),r=j.optionChain.result[0],o=r.options[0],K=[...new Set([...o.calls,...o.puts].map(x=>x.strike))].sort((a,b)=>a-b),oi=(a,k)=>a.filter(x=>x.strike===k).reduce((t,x)=>t+(x.openInterest||0),0);
+  let best=null,bp=1/0;K.forEach(S=>{const p=o.calls.reduce((t,c)=>t+(c.openInterest||0)*Math.max(0,S-c.strike),0)+o.puts.reduce((t,c)=>t+(c.openInterest||0)*Math.max(0,c.strike-S),0);if(p<bp){bp=p;best=S}});
+  const cO=o.calls.reduce((t,c)=>t+(c.openInterest||0),0),pO=o.puts.reduce((t,c)=>t+(c.openInterest||0),0),top=f=>K.reduce((a,k)=>f(k)>f(a)?k:a,K[0]);
+  if(s!==sym)return;$('#optout').innerHTML=`<div class="kv" style="max-width:520px"><div>Spot <b>${money(r.quote.regularMarketPrice)}</b></div><div>Expiry <b>${new Date(o.expirationDate*1000).toISOString().slice(0,10)}</b></div><div>Max pain <b class="up">${money(best)}</b></div><div>Put/call OI <b class="am">${(pO/cC(cO)).toFixed(2)}</b></div><div>Call wall <b class="dn">${money(top(k=>oi(o.calls,k)))}</b></div><div>Put support <b class="up">${money(top(k=>oi(o.puts,k)))}</b></div><div>Gamma pin (max total OI) <b>${money(top(k=>oi(o.calls,k)+oi(o.puts,k)))}</b></div></div>`}
+ catch(e){$('#optout').innerHTML='<p class="mu">Yahoo blocked the live options chain from the browser, so max pain can’t be computed here. Use the chain links below. The next monthly expiry above is calculated, not fetched.</p>'}}
+const cC=v=>v||1;
+
+/* ---------- macro calendar ---------- */
+const HOL={'2026-11-26':'US closed: Thanksgiving','2026-11-27':'US early close 1pm ET','2026-12-24':'US early close 1pm ET','2026-12-25':'US closed: Christmas','2027-01-01':'US closed: New Year','2027-01-18':'US closed: MLK Day','2027-02-15':'US closed: Presidents Day'};
+const FOMC=['2026-01-28','2026-03-18','2026-04-29','2026-06-17','2026-07-29','2026-09-16','2026-10-28','2026-12-09'],EST={'2026-11-10':['cpi','CPI ✓'],'2026-11-13':['ppi','PPI ✓'],'2026-11-18':['fomc','FOMC minutes*'],'2026-11-25':['pce','PCE*'],'2026-12-15':['ppi','PPI ✓']};
+let cal={y:new Date().getFullYear(),m:new Date().getMonth()};
+function mv(d){cal.m+=d;if(cal.m<0){cal.m=11;cal.y--}if(cal.m>11){cal.m=0;cal.y++}drawCal()}
+function drawCal(){const{y,m}=cal,iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'),f=1+((5-new Date(y,m,1).getDay()+7)%7),ev={};
+ const add=(d,c,t)=>(ev[d]=ev[d]||[]).push([c,t]);add(iso(new Date(y,m,f)),'nfp','NFP jobs');add(iso(thirdFri(y,m)),'opex',m%3===2?'Quad witching':'Options expiry');FOMC.forEach(d=>add(d,'fomc','FOMC decision'));Object.entries(HOL).forEach(([d,t])=>add(d,'hol',t));Object.entries(EST).forEach(([d,[c,t]])=>add(d,c,t));
+ $('#cm').textContent=new Date(y,m,1).toLocaleString('en',{month:'long',year:'numeric'});const lead=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),td=iso(new Date());
+ let h=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<div class="h">${d}</div>`).join('')+'<div class="o"></div>'.repeat(lead);
+ for(let d=1;d<=days;d++){const k=iso(new Date(y,m,d));h+=`<div class="${k===td?'td':''}"><b class="m">${d}</b>${(ev[k]||[]).map(([c,t])=>`<span class="ev e-${c}">${t}</span>`).join('')}</div>`}$('#cal').innerHTML=h}
+
+/* ---------- earnings watchlist ---------- */
+/* [ticker, name, groups, US date, session, status] status: c=confirmed by company, e=listed by data sites, p=pattern guess */
+const EARN=[
+['NVDA','NVIDIA','M,S','2026-11-17','AMC','c'],['AAPL','Apple','M','2027-01-28','AMC','p'],['MSFT','Microsoft','M','2027-01-27','AMC','p'],['GOOGL','Alphabet (Google)','M','2027-02-03','AMC','p'],['AMZN','Amazon','M','2027-02-04','AMC','p'],['META','Meta','M','2027-01-27','AMC','p'],['TSLA','Tesla','M','2027-01-27','AMC','p'],
+['AVGO','Broadcom','S','2026-12-09','AMC','c'],['MU','Micron','S','2026-12-16','AMC','e'],['ADI','Analog Devices','S','2026-11-24','BMO','e'],['MRVL','Marvell','S','2026-12-02','AMC','p'],['TSM','TSMC','S','2027-01-14','BMO','p'],['INTC','Intel','S','2027-01-21','AMC','p'],['AMD','AMD','S','2027-02-03','AMC','p'],['QCOM','Qualcomm','S','2027-02-03','AMC','p'],
+['PANW','Palo Alto Networks','W','2026-11-18','AMC','e'],['INTU','Intuit','W','2026-11-19','AMC','e'],['CRM','Salesforce','W','2026-12-02','AMC','c'],['CRWD','CrowdStrike','W','2026-12-01','AMC','p'],['ORCL','Oracle','W','2026-12-09','AMC','p'],['ADBE','Adobe','W','2026-12-10','AMC','p'],['NOW','ServiceNow','W','2027-01-27','AMC','p'],['PLTR','Palantir','W','2027-02-02','AMC','p'],
+['MDT','Medtronic','H','2026-11-24','BMO','e'],['JNJ','Johnson & Johnson','H','2027-01-19','BMO','p'],['UNH','UnitedHealth','H','2027-01-26','BMO','p'],['LLY','Eli Lilly','H','2027-02-04','BMO','p'],
+['HD','Home Depot','C','2026-11-17','BMO','e'],['TGT','Target','C','2026-11-18','BMO','e'],['LOW','Lowe’s','C','2026-11-18','BMO','e'],['WMT','Walmart','C','2026-11-19','BMO','e'],['COST','Costco','C','2026-12-10','AMC','p'],['NKE','Nike','C','2026-12-17','AMC','p'],['PG','Procter & Gamble','C','2027-01-21','BMO','p'],['PEP','PepsiCo','C','2027-02-02','BMO','p'],['KO','Coca-Cola','C','2027-02-10','BMO','p'],
+['JPM','JPMorgan','F','2027-01-13','BMO','p'],['WFC','Wells Fargo','F','2027-01-13','BMO','p'],['BAC','Bank of America','F','2027-01-14','BMO','p'],['GS','Goldman Sachs','F','2027-01-14','BMO','p'],['MS','Morgan Stanley','F','2027-01-14','BMO','p'],['V','Visa','F','2027-01-28','AMC','p'],['MA','Mastercard','F','2027-01-28','BMO','p'],['BRK.B','Berkshire Hathaway','F','2027-02-27','','p']];
+const EG={M:'Mag 7',S:'Semis',W:'Software',H:'Healthcare',C:'Consumer',F:'Finance'},ST={c:['✓ confirmed','st-c'],e:['~ est.','st-e'],p:['≈ pattern','st-p']};
+let ef='All';
+const t0=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate())};
+const sgtDate=(sess,d)=>{const x=new Date(d+'T00:00:00');if(sess==='AMC')x.setDate(x.getDate()+1);return x};
+const dfmt=x=>x.toLocaleDateString('en',{weekday:'short',day:'numeric',month:'short'});
+function drawEarn(){const ed=store.get('md_edates',{}),T=t0();
+ $('#ef').innerHTML=['All',...Object.values(EG)].map(g=>`<button class="chip ${g===ef?'on':''}" onclick="ef='${g}';drawEarn()">${g}</button>`).join(' ');
+ const fh=store.get('md_fh',{});const rows=EARN.map(r=>{const mine=ed[r[0]],f=fh[r[0]],conf=r[5]==='c',d=mine||(!conf&&f&&f.d)||r[3],ses=(!conf&&f&&f.h)||r[4],s=sgtDate(ses,d);return{r:[r[0],r[1],r[2],d,ses,r[5]],d,s,mine,f,conf,n:Math.round((s-T)/864e5)}}).filter(o=>o.n>=-3&&(ef==='All'||o.r[2].split(',').some(c=>EG[c]===ef))).sort((a,b)=>a.s-b.s||a.r[0].localeCompare(b.r[0]));
+ $('#et').innerHTML='<tr><th>Ticker</th><th>Sector</th><th>Reports (US)</th><th>Your time (SGT)</th><th>Countdown</th><th>Status</th><th></th></tr>'+(rows.map(({r,d,s,mine,f,conf,n})=>{
+  const us=dfmt(new Date(d+'T00:00:00'))+(r[4]?' · '+r[4]:''),tm=r[4]==='AMC'?' ~5am':r[4]==='BMO'?' ~9pm':'',cd=n<0?'reported':n===0?'today':n===1?'tomorrow':'in '+n+' days',st=mine?['✎ your date','st-c']:conf&&f&&f.d!==d?['✓ confirmed (feed says '+f.d+')','st-c']:!conf&&f?['↻ feed','st-e']:ST[r[5]];
+  return`<tr class="${n<0?'past':n<=3?'soon':''}"><td><b class="m am" style="cursor:pointer" onclick="setSym('${r[0]}');go('analyze')">${r[0]}</b><br><small class="mu">${esc(r[1])}</small></td><td class="mu">${r[2].split(',').map(c=>EG[c]).join(', ')}</td><td class="m">${us}</td><td class="m">${dfmt(s)}${tm}</td><td><b>${cd}</b></td><td class="${st[1]}">${st[0]}</td><td><a href="https://www.nasdaq.com/market-activity/stocks/${r[0].toLowerCase().replace('.','-')}/earnings" target="_blank" rel="noopener" class="mu">verify</a> <button class="chip" title="Correct this date" onclick="editE('${r[0]}')">✎</button></td></tr>`}).join('')||'<tr><td colspan="7" class="mu">Nothing in this group.</td></tr>')}
+async function refreshEarn(){const k=$('#fk').value.trim(),o=$('#fst'),b=$('#fgo');if(!k){o.textContent='Paste your Finnhub key first.';return}
+ store.set('md_fhk',k);b.disabled=true;const fh={},T=new Date(),iso=x=>x.toISOString().slice(0,10),to=new Date(T.getTime()+200*864e5),wait=ms=>new Promise(z=>setTimeout(z,ms));let ok=0,bad=0,retry=0;
+ for(let i=0;i<EARN.length;i++){const t=EARN[i][0];o.textContent=`Checking ${t} (${i+1}/${EARN.length})…`;
+  try{const fu=`https://finnhub.io/api/v1/calendar/earnings?from=${iso(T)}&to=${iso(to)}&symbol=${encodeURIComponent(t)}&token=${encodeURIComponent(k)}`;let r;try{r=await fetch(fu)}catch(e){r=await fetch(LOCAL+encodeURIComponent(fu))}
+   if(r.status===401||r.status===403)throw new Error('KEY');
+   if(r.status===429&&retry++<3){await wait(15000);i--;continue}
+   if(!r.ok)throw new Error('HTTP '+r.status);
+   const j=await r.json(),a=(j.earningsCalendar||[]).filter(x=>x.date).sort((x,y)=>x.date<y.date?-1:1)[0];
+   if(a){fh[t]={d:a.date,h:({bmo:'BMO',amc:'AMC'})[a.hour]||''};ok++}else bad++}
+  catch(e){if(e.message==='KEY'){o.innerHTML='<span class="dn">Finnhub rejected the key. Check it and try again.</span>';b.disabled=false;return}
+   bad++;if(ok===0&&bad>=3){o.innerHTML='<span class="dn">Couldn’t reach Finnhub from this page (the browser may be blocking it). Your existing dates are unchanged.</span>';b.disabled=false;return}}
+  await wait(1100)}
+ if(ok)store.set('md_fh',{...store.get('md_fh',{}),...fh});
+ o.textContent=ok?`Updated ${new Date().toLocaleTimeString()} · ${ok} found, ${bad} with no date listed (kept as before).`:'Finnhub returned no dates. Existing dates are unchanged.';b.disabled=false;drawEarn();drawWarn()}
+/* ---------- warnings: events in the next 7 days + US session ---------- */
+const WARN_DAYS=7,ik=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'),nfpOf=(y,m)=>new Date(y,m,1+((5-new Date(y,m,1).getDay()+7)%7));
+const edateOf=r=>{const ed=store.get('md_edates',{}),f=store.get('md_fh',{})[r[0]],conf=r[5]==='c';return{d:ed[r[0]]||(!conf&&f&&f.d)||r[3],ses:(!conf&&f&&f.h)||r[4],conf}};
+function upcoming(){const T=t0(),out=[],P=k=>new Date(k+'T00:00:00'),push=(d,label,sev,hint)=>{const n=Math.round((d-T)/864e5);if(n>=0&&n<=WARN_DAYS)out.push({d,n,label,sev,hint})};
+ FOMC.forEach(k=>push(P(k),'FOMC rate decision','high','2pm ET, about 3am Singapore time the next day'));
+ Object.entries(EST).forEach(([k,[c,t]])=>push(P(k),t.replace(/[✓*]/g,'').trim(),c==='cpi'||c==='ppi'?'high':'mid',c==='cpi'||c==='ppi'?'8:30am ET, 9:30pm Singapore time':''));
+ [0,1].forEach(i=>{const n=nfpOf(T.getFullYear(),T.getMonth()+i);if(!HOL[ik(n)])push(n,'NFP jobs report','high','8:30am ET, 9:30pm Singapore time');const o=thirdFri(T.getFullYear(),T.getMonth()+i);push(o,o.getMonth()%3===2?'Quad witching (big expiry)':'Options expiry','mid','')});
+ Object.entries(HOL).forEach(([k,t])=>push(P(k),t,'mid',''));
+ EARN.forEach(r=>{const x=edateOf(r),mine=r[0]===sym;if(mine||r[2].split(',').some(c=>c==='M'||c==='S'))push(sgtDate(x.ses,x.d),r[0]+' earnings'+(x.conf?'':' (date unconfirmed)'),mine?'high':'mid',x.ses==='AMC'?'after US close':x.ses==='BMO'?'before US open':'')});
+ return out}
+function usSession(){const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).map(x=>[x.type,x.value])),m=+p.hour*60+ +p.minute,k=p.year+'-'+p.month+'-'+p.day;
+ if(p.weekday==='Sat'||p.weekday==='Sun'||(HOL[k]&&/closed/.test(HOL[k])))return['US market closed today','mu'];
+ if(m>=570&&m<600)return['US open: first 30 min, swings are widest','high'];if(m>=600&&m<960)return['US market open','up'];if(m>=240&&m<570)return['US pre-market (opens 9:30am ET)','mu'];if(m>=960&&m<1200)return['US after-hours','mu'];return['US overnight session (thin volume)','mu']}
+const inDays=n=>n===0?'today':n===1?'tomorrow':'in '+n+' days';
+function drawWarn(){const u=upcoming().sort((a,b)=>a.d-b.d||(a.sev==='high'?-1:1)),[st,c]=usSession();
+ $('#warn').innerHTML=`<div class="wr"><span class="wp ${c}">${st}</span>${u.map(e=>`<span class="wp ${e.sev}" title="${esc(e.hint)}">${e.sev==='high'?'⚠':'•'} ${inDays(e.n)} · ${dfmt(e.d)} · <b>${esc(e.label)}</b></span>`).join('')}</div>`}
+function warnFor(){const u=upcoming().filter(e=>e.sev==='high').sort((a,b)=>a.d-b.d);return u.length?`<div class="it bear" style="margin:10px 0"><small class="m">Event risk in the next ${WARN_DAYS} days. The signal below uses price history only and does not account for these.</small><p style="color:var(--tx)">${u.map(e=>inDays(e.n)+': '+esc(e.label)).join(' · ')}</p></div>`:''}
+function editE(t){const v=prompt('US report date for '+t+' (YYYY-MM-DD). Leave blank to reset.');if(v===null)return;const m=store.get('md_edates',{});if(/^\d{4}-\d{2}-\d{2}$/.test(v.trim()))m[t]=v.trim();else delete m[t];store.set('md_edates',m);drawEarn();drawWarn()}
+
+/* ---------- boot ---------- */
+$('#tl').innerHTML=Object.entries(NAMES).map(([t,n])=>`<option value="${t}">${n}</option>`).join('');$('#q').value=sym;$('#aq').value=sym;chips();
+embed('tape','ticker-tape',{symbols:[{proName:'FOREXCOM:SPXUSD',title:'S&P 500'},{proName:'FOREXCOM:NSXUSD',title:'Nasdaq 100'},{proName:'FOREXCOM:DJI',title:'Dow'},{proName:'TVC:US10Y',title:'US 10Y'},{proName:'TVC:DXY',title:'Dollar'},{proName:'TVC:USOIL',title:'WTI Oil'},{proName:'TVC:GOLD',title:'Gold'},{proName:'BITSTAMP:BTCUSD',title:'Bitcoin'}],showSymbolLogo:false,isTransparent:true,displayMode:'adaptive',colorTheme:'dark',locale:'en'});
+aiLoad();go('news');loadNews();drawEarn();drawWarn();$('#fk').value=store.get('md_fhk','');setInterval(drawEarn,3600000);setInterval(drawWarn,60000);
+setInterval(()=>{if(!document.hidden&&view==='analyze')scan(false)},45000);setInterval(()=>{if(!document.hidden&&view==='news')loadNews()},300000);
+</script></body></html>
